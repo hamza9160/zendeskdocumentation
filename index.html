@@ -66,17 +66,6 @@
       margin-top: 4px;
     }
 
-    .sidebar-logo .version {
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 10px;
-      font-family: 'IBM Plex Mono', monospace;
-      color: rgba(255,255,255,0.35);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 3px;
-      padding: 2px 7px;
-    }
-
     .nav-section {
       padding: 20px 0 8px;
     }
@@ -204,23 +193,6 @@
       max-width: 600px;
     }
 
-    .hero-meta {
-      display: flex;
-      gap: 24px;
-      margin-top: 24px;
-    }
-
-    .hero-meta-item {
-      font-size: 12px;
-      font-family: 'IBM Plex Mono', monospace;
-      color: var(--muted);
-    }
-
-    .hero-meta-item strong {
-      color: var(--text);
-      font-weight: 500;
-    }
-
     /* ── SECTIONS ────────────────────────────────────── */
     .section {
       margin-bottom: 56px;
@@ -303,11 +275,6 @@
       white-space: pre;
     }
 
-    .code-block .key { color: #79c0ff; }
-    .code-block .str { color: #a5d6ff; }
-    .code-block .punct { color: rgba(255,255,255,0.35); }
-    .code-block .comment { color: rgba(255,255,255,0.3); font-style: italic; }
-
     .code-label {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
@@ -343,8 +310,6 @@
 
     .method.post { background: #e6f4ea; color: #1e7e34; }
     .method.get  { background: #e8f1fb; color: #1a6fbf; }
-    .method.put  { background: #fff3e0; color: #e65100; }
-    .method.ws   { background: #f0eaff; color: #6b21a8; }
 
     /* ── TABLE ───────────────────────────────────────── */
     .data-table {
@@ -468,14 +433,6 @@
       border-top: 6px solid rgba(255,255,255,0.15);
     }
 
-    .arch-internal {
-      font-size: 10px;
-      font-family: 'IBM Plex Mono', monospace;
-      color: rgba(255,255,255,0.2);
-      font-style: italic;
-      padding: 2px 0 6px;
-    }
-
     /* ── QUICK REF ───────────────────────────────────── */
     .quick-ref {
       display: grid;
@@ -569,7 +526,6 @@
   <div class="sidebar-logo">
     <div class="product">DocUpdate</div>
     <div class="sub">Concierge API</div>
-    <div class="version">v1.0 · April 2026</div>
   </div>
 
   <div class="nav-section">
@@ -584,15 +540,14 @@
     <a href="#users"           class="nav-item"><span class="num">04</span>User Management</a>
     <a href="#requests"        class="nav-item"><span class="num">05</span>Submitting Requests</a>
     <a href="#messaging"       class="nav-item"><span class="num">06</span>Messaging</a>
-    <a href="#request-mgmt"    class="nav-item"><span class="num">07</span>Request Management</a>
-    <a href="#preferences"     class="nav-item"><span class="num">08</span>Contact Preferences</a>
+    <a href="#request-mgmt"    class="nav-item"><span class="num">07</span>Conversation Management</a>
   </div>
 
   <div class="nav-section">
     <div class="nav-label">Reference</div>
-    <a href="#errors"          class="nav-item"><span class="num">09</span>Error Handling</a>
-    <a href="#quick-ref"       class="nav-item"><span class="num">10</span>Quick Reference</a>
-    <a href="#support"         class="nav-item"><span class="num">11</span>Support</a>
+    <a href="#errors"          class="nav-item"><span class="num">08</span>Error Handling</a>
+    <a href="#quick-ref"       class="nav-item"><span class="num">09</span>Quick Reference</a>
+    <a href="#support"         class="nav-item"><span class="num">10</span>Support</a>
   </div>
 
   <div class="sidebar-footer">Confidential · Authorized Partners Only</div>
@@ -612,11 +567,6 @@
       <div class="hero-eyebrow">Partner Integration Guide</div>
       <h1>DocUpdate Concierge API</h1>
       <p>Concierge enables healthcare professionals to accelerate access to samples, patient support programs, education, reps, and more, all through a single integration with DocUpdate.</p>
-      <div class="hero-meta">
-        <div class="hero-meta-item"><strong>Version</strong> &nbsp;1.0</div>
-        <div class="hero-meta-item"><strong>Released</strong> &nbsp;April 2026</div>
-        <div class="hero-meta-item"><strong>Auth</strong> &nbsp;API Key</div>
-      </div>
     </div>
 
     <!-- 1. OVERVIEW -->
@@ -631,11 +581,10 @@
       <table class="data-table">
         <thead><tr><th>Capability</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>Request Submission</td><td>Submit sample requests, rep visit schedules, and custom requests</td></tr>
-          <tr><td>Request Tracking</td><td>Retrieve active and archived requests for a given user</td></tr>
-          <tr><td>Messaging</td><td>Real-time messaging via WebSocket on a specific request conversation</td></tr>
-          <tr><td>Contact Preferences</td><td>Set and update a user's preferred contact hours</td></tr>
-          <tr><td>User Management</td><td>Register and manage HCP user accounts</td></tr>
+          <tr><td>User Management</td><td>Register and update HCP accounts (upsert, keyed by NPI)</td></tr>
+          <tr><td>Request Submission</td><td>Create a conversation by submitting a request type and message</td></tr>
+          <tr><td>Messaging</td><td>Retrieve and send messages on a conversation via REST</td></tr>
+          <tr><td>Conversation Tracking</td><td>Retrieve a user's active and archived conversations</td></tr>
         </tbody>
       </table>
 
@@ -645,7 +594,7 @@
       <div class="arch">
         <div class="arch-box">Your Application</div>
         <div class="arch-arrow">
-          <div class="label">HTTPS + API Key &nbsp;·&nbsp; WSS + JWT (messaging)</div>
+          <div class="label">HTTPS + API Key</div>
           <div class="line"></div>
           <div class="tip"></div>
         </div>
@@ -658,8 +607,37 @@
         <div class="arch-box">Messaging Engine</div>
       </div>
 
+      <h3>End-to-End Flow</h3>
+      <p>A typical integration follows the sequence below — register the user on login, fetch the available request types, create a conversation, then exchange and track messages. Each step is detailed in the sections that follow.</p>
+
+      <div class="flowchart-wrap">
+        <div class="flowchart-title">End-to-End Integration Flow</div>
+        <div class="mermaid">
+sequenceDiagram
+    participant App as Your Application
+    participant API as DocUpdate Concierge API
+    Note over App,API: On login (and whenever details change)
+    App->>API: POST /users (upsert HCP by NPI)
+    API-->>App: userId
+    Note over App,API: Starting a request
+    App->>API: GET /request-types
+    API-->>App: request types (+ samplesList)
+    App->>API: POST /conversations (requestType, message)
+    API-->>App: conversationId
+    Note over App,API: Messaging on a conversation
+    App->>API: GET /conversations/{id}/messages
+    API-->>App: messages + status
+    App->>API: POST /conversations/{id}/messages (message)
+    API-->>App: message
+    Note over App,API: Viewing history
+    App->>API: GET /users/{npi}/conversations/active
+    API-->>App: active conversations
+        </div>
+      </div>
+
       <h3>Messaging UI Ownership</h3>
-      <p>DocUpdate provides a WebSocket connection for real-time messaging. Your application is responsible for rendering the messaging interface. Messages are delivered with a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 6px;border-radius:3px;color:var(--blue)">role</code> field (<code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 6px;border-radius:3px;color:var(--blue)">user</code> or <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 6px;border-radius:3px;color:var(--blue)">agent</code>) that you can use to differentiate and style messages on each side of the conversation.</p>
+      <p>DocUpdate provides REST endpoints for messaging. Your application is responsible for rendering the messaging interface. Messages are delivered with a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 6px;border-radius:3px;color:var(--blue)">role</code> field (<code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 6px;border-radius:3px;color:var(--blue)">user</code> or <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 6px;border-radius:3px;color:var(--blue)">agent</code>) that you can use to differentiate and style messages on each side of the conversation.</p>
+
     </div>
 
     <div class="divider"></div>
@@ -691,25 +669,6 @@
       </table>
 
       <div class="note"><strong>Obtaining an API Key:</strong> Contact your DocUpdate integration representative to receive your API key. Keep your key secure and do not expose it in client-side code.</div>
-
-      <h3>WebSocket Authentication</h3>
-      <p>The WebSocket connection used for real-time messaging (see <a href="#messaging" style="color:var(--blue)">Section 06 — Messaging</a>) uses a separate authentication mechanism. Pass the following headers on the WebSocket upgrade request:</p>
-
-      <div class="code-block">
-        <div class="code-label">Headers</div>
-        <pre>Authorization: Bearer {jwtToken}
-npi:           1234567890</pre>
-      </div>
-
-      <table class="data-table">
-        <thead><tr><th>Header</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td>Authorization</td><td>A JWT token identifying the HCP. Generated server-side from the user's NPI, name, and email. Expires after 6 hours — re-authenticate before opening a new connection.</td></tr>
-          <tr><td>npi</td><td>The HCP's National Provider Identifier. Used to associate the connection with the correct user account.</td></tr>
-        </tbody>
-      </table>
-
-      <div class="note">The <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">X-DocUpdate-API-Key</code> header is not used for WebSocket connections. The JWT replaces it for the messaging channel.</div>
     </div>
 
     <div class="divider"></div>
@@ -730,16 +689,6 @@ npi:           1234567890</pre>
         </tbody>
       </table>
 
-      <h3>WebSocket (WSS)</h3>
-      <p>Used exclusively for the messaging connection (Section 06). Endpoint paths are the same — only the scheme changes.</p>
-      <table class="data-table">
-        <thead><tr><th>Environment</th><th>Base URL</th></tr></thead>
-        <tbody>
-          <tr><td>Production</td><td><code style="font-family:'IBM Plex Mono',monospace;font-size:12px">wss://api.docupdate.io/concierge/v1</code></td></tr>
-          <tr><td>Sandbox</td><td><code style="font-family:'IBM Plex Mono',monospace;font-size:12px">wss://sandbox.api.docupdate.io/concierge/v1</code></td></tr>
-        </tbody>
-      </table>
-
       <p>All endpoint paths in this document are relative to the base URL. Use the sandbox environment for all development and testing.</p>
     </div>
 
@@ -751,20 +700,21 @@ npi:           1234567890</pre>
         <span class="section-num">04</span>
         <h2>User Management</h2>
       </div>
-      <p>Before an HCP can submit requests or send messages, they must be registered with DocUpdate. Registration should occur automatically following user login in your application.</p>
+      <p>Before an HCP can create conversations or send messages, they must be registered with DocUpdate. Registration should occur automatically following user login in your application, and again whenever the user's details change.</p>
 
-      <h4>Register User</h4>
+      <h4>Register or Update User</h4>
       <div class="endpoint"><span class="method post">POST</span>/users</div>
-      <p>Creates a new HCP user account. If the user already exists (identified by NPI), the existing account is returned.</p>
+      <p>Upsert endpoint for HCP user accounts. The user is identified by NPI: if no account exists, a new one is created; if an account already exists, its details (email, name, phone) are updated with the values in the request. Call this endpoint both on first login and whenever the user's details change.</p>
 
       <h3>Request Body</h3>
       <div class="code-block">
         <div class="code-label">JSON</div>
         <pre>{
-  "npi":       "1234567890",
-  "email":     "dr.smith@practice.com",
+  "npi": "1234567890",
+  "email": "dr.smith@practice.com",
   "firstName": "Jane",
-  "lastName":  "Smith"
+  "lastName": "Smith",
+  "phone": "404-555-0100"
 }</pre>
       </div>
 
@@ -775,20 +725,20 @@ npi:           1234567890</pre>
           <tr><td>email</td><td><span class="tag required">required</span> string</td><td>User's email address.</td></tr>
           <tr><td>firstName</td><td><span class="tag required">required</span> string</td><td>User's first name.</td></tr>
           <tr><td>lastName</td><td><span class="tag required">required</span> string</td><td>User's last name.</td></tr>
+          <tr><td>phone</td><td><span class="tag required">required</span> string</td><td>User's phone number.</td></tr>
         </tbody>
       </table>
-
-      <div class="note"><strong>Phone number:</strong> The user's phone number is not stored at registration. It is collected at the point of request submission as part of the <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">metadata</code> object in <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">POST /conversations</code> (see Section 05), since contact preferences may vary per request.</div>
 
       <h3>Response — 201 Created / 200 OK</h3>
       <div class="code-block">
         <div class="code-label">JSON</div>
         <pre>{
-  "userId":    "usr_abc123",
-  "npi":       "1234567890",
-  "email":     "dr.smith@practice.com",
+  "userId": "usr_abc123",
+  "npi": "1234567890",
+  "email": "dr.smith@practice.com",
   "firstName": "Jane",
-  "lastName":  "Smith",
+  "lastName": "Smith",
+  "phone": "404-555-0100",
   "createdAt": "2026-04-06T12:00:00Z"
 }</pre>
       </div>
@@ -797,11 +747,11 @@ npi:           1234567890</pre>
         <div class="flowchart-title">User Registration Flow</div>
         <div class="mermaid">
 flowchart TD
-    A([App Login]) --> B["POST /users\nnpi · email · firstName · lastName"]
+    A([App Login or details changed]) --> B["POST /users\nnpi · email · firstName · lastName · phone"]
     B --> C{HTTP Response}
-    C -- 201 Created --> D[New user registered]
-    C -- 200 OK --> E[Existing user returned]
-    D --> F([Store userId — ready to submit requests])
+    C -- 201 Created --> D[New user created]
+    C -- 200 OK --> E[Existing user updated]
+    D --> F([Store userId — ready to create conversations])
     E --> F
         </div>
       </div>
@@ -816,34 +766,61 @@ flowchart TD
         <h2>Submitting a Request</h2>
       </div>
 
-      <h4>Create Conversation</h4>
-      <div class="endpoint"><span class="method post">POST</span>/conversations</div>
-      <p>Creates a new Concierge request conversation for the specified user.</p>
+      <p>Submitting a request is a two-call flow: first fetch the available request types (and, for sample requests, the list of available samples), then create a conversation using the selected type's <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">id</code>.</p>
 
-      <h3>Request Body</h3>
+      <h4>Get Request Types</h4>
+      <div class="endpoint"><span class="method get">GET</span>/request-types</div>
+      <p>Returns the list of request types a user can choose from. Call this before creating a conversation and use it to populate the request-type selector. Each type's <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">id</code> is the value sent as <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">requestType</code> in Create Conversation below. The <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">samplesList</code> is present only for the samples request type and lists the medications the user can request.</p>
+
+      <h3>Response — 200 OK</h3>
       <div class="code-block">
         <div class="code-label">JSON</div>
         <pre>{
-  "npi":         "1234567890",
-  "requestType": "Request Free Samples",
-  "message":     "I would like to request samples of Medication X.",
-  "metadata": {
-    "email": "dr.smith@practice.com",
-    "name":  "Dr. Jane Smith",
-    "phone": "404-555-0100"
-  }
+  "requestTypes": [
+    {
+      "id": 1,
+      "requestType": "Request Free Samples",
+      "samplesList": ["Ozempic", "Atorvastatin", "Mounjaro"]
+    },
+    {
+      "id": 2,
+      "requestType": "Schedule a Rep Visit"
+    },
+    {
+      "id": 3,
+      "requestType": "Custom Request"
+    }
+  ]
 }</pre>
       </div>
 
       <table class="data-table">
         <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>npi</td><td><span class="tag required">required</span> string</td><td>NPI of the submitting HCP.</td></tr>
-          <tr><td>requestType</td><td><span class="tag required">required</span> string</td><td>One of: <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">Request Free Samples</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">Schedule Rep Visit</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">Custom Request</code></td></tr>
-          <tr><td>message</td><td><span class="tag required">required</span> string</td><td>The user's request message. Max 200 characters.</td></tr>
-          <tr><td>metadata.email</td><td><span class="tag required">required</span> string</td><td>User's email address.</td></tr>
-          <tr><td>metadata.name</td><td><span class="tag required">required</span> string</td><td>User's full name.</td></tr>
-          <tr><td>metadata.phone</td><td><span class="tag required">required</span> string</td><td>User's phone number.</td></tr>
+          <tr><td>id</td><td>integer</td><td>The request type identifier. Send this as <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">requestType</code> when creating a conversation.</td></tr>
+          <tr><td>requestType</td><td>string</td><td>Human-readable label for the request type. Use it as the selector option text.</td></tr>
+          <tr><td>samplesList</td><td><span class="tag optional">optional</span> string[]</td><td>List of available sample medications. Present only for the samples request type (<code style="font-family:'IBM Plex Mono',monospace;font-size:12px">id: 1</code>).</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Create Conversation</h4>
+      <div class="endpoint"><span class="method post">POST</span>/conversations</div>
+      <p>Creates a new Concierge conversation for the specified user. The request type and initial message are submitted here, and a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">conversationId</code> is returned for all follow-up messaging.</p>
+
+      <h3>Request Body</h3>
+      <div class="code-block">
+        <div class="code-label">JSON</div>
+        <pre>{
+  "requestType": 1,
+  "message": "I need samples of Ozempic"
+}</pre>
+      </div>
+
+      <table class="data-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>requestType</td><td><span class="tag required">required</span> integer</td><td>The <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">id</code> of the selected request type, obtained from <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">GET /request-types</code> above (<code style="font-family:'IBM Plex Mono',monospace;font-size:11px">1</code> = Request Free Samples, <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">2</code> = Schedule a Rep Visit, <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">3</code> = Custom Request).</td></tr>
+          <tr><td>message</td><td><span class="tag required">required</span> string</td><td>The user's request message. Max 200 characters. For a samples request, include the requested medication names (from <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">samplesList</code>) in this message.</td></tr>
         </tbody>
       </table>
 
@@ -852,18 +829,21 @@ flowchart TD
         <div class="code-label">JSON</div>
         <pre>{
   "conversationId": "conv_xyz789",
-  "status":         "new",
-  "requestType":    "Request Free Samples",
-  "createdAt":      "2026-04-06T12:05:00Z"
+  "status": "new",
+  "requestType": 1,
+  "createdAt": "2026-04-06T12:05:00Z"
 }</pre>
       </div>
-      <div class="note">Store the <strong>conversationId</strong> returned. It is required to retrieve messages and send follow-up messages on this request.</div>
+      <div class="note">Store the <strong>conversationId</strong> returned. It is required to retrieve messages and send follow-up messages on this conversation.</div>
 
       <div class="flowchart-wrap">
         <div class="flowchart-title">Submit Request Flow</div>
         <div class="mermaid">
 flowchart TD
-    A([User fills request form]) --> B["POST /conversations\nnpi · requestType · message · metadata"]
+    A([Open request form]) --> G["GET /request-types"]
+    G --> H[Populate type selector + samples list]
+    H --> I([User selects type + writes message])
+    I --> B["POST /conversations\nrequestType · message"]
     B --> C{HTTP Response}
     C -- 201 Created --> D[Store conversationId]
     C -- 4xx / 5xx --> E([Show error to user])
@@ -881,157 +861,199 @@ flowchart TD
         <h2>Messaging</h2>
       </div>
 
-      <p>Messaging uses a <strong>WebSocket connection</strong> instead of REST. A single persistent connection handles both receiving the message history and sending new messages in real time.</p>
+      <p>Messaging uses standard REST endpoints. Retrieve a conversation's message history with a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">GET</code> request, and post new messages with a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">POST</code> request. Poll the history endpoint to display new agent replies.</p>
 
-      <h4>Connect</h4>
-      <div class="endpoint"><span class="method ws">WSS</span>/conversations/{conversationId}/messages</div>
-      <p>Opens a WebSocket connection for the specified conversation. Authentication is passed via the <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">Authorization</code> header on the upgrade request.</p>
+      <h4>Get Messages</h4>
+      <div class="endpoint"><span class="method get">GET</span>/conversations/{conversationId}/messages</div>
+      <p>Returns a page of messages for the specified conversation, along with the conversation's current <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">status</code> (see <a href="#request-mgmt" style="color:var(--blue)">Section 07 — Status Reference</a>). By default the <strong>most recent</strong> messages are returned; page backward through history using the cursor links below. Call this when opening the conversation, and poll periodically to fetch new agent replies and status changes.</p>
 
-      <h3>Connection Headers</h3>
-      <div class="code-block">
-        <div class="code-label">Headers</div>
-        <pre>Authorization: Bearer {jwtToken}
-npi:           1234567890</pre>
-      </div>
+      <h3>Query Parameters</h3>
+      <table class="data-table">
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>page[size]</td><td><span class="tag optional">optional</span> integer</td><td>Number of messages per page. Fixed at <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">100</code> for the messages endpoint.</td></tr>
+          <tr><td>page[before]</td><td><span class="tag optional">optional</span> string</td><td>Cursor pointing to a message id. Returns messages <em>older than</em> (preceding) the cursor — used to load earlier history. Prefer following the <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">links.prev</code> URL.</td></tr>
+          <tr><td>page[after]</td><td><span class="tag optional">optional</span> string</td><td>Cursor pointing to a message id. Returns messages <em>newer than</em> (following) the cursor. Prefer following the <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">links.next</code> URL.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Pagination is cursor-based, mirroring Sunshine Conversations. With no cursor, the <strong>most recent</strong> page is returned (newest history first). To load older messages, follow the <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">links.prev</code> URL (or pass <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">page[before]</code>); to fetch newer messages, follow <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">links.next</code> (or <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">page[after]</code>). The <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">meta.hasMore</code> flag indicates whether more messages exist in the direction you are paging. Page size is fixed at 100.</div>
 
-      <div class="note">On successful connection, the server immediately sends a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">history</code> event containing all existing messages for the conversation in chronological order.</div>
-
-      <h4>Server → Client Events</h4>
-
-      <h3>Event: <code style="font-family:'IBM Plex Mono',monospace;font-size:13px">history</code></h3>
-      <p>Sent once on connect. Contains the full message history for the conversation.</p>
+      <h3>Response — 200 OK</h3>
       <div class="code-block">
         <div class="code-label">JSON</div>
         <pre>{
-  "type":           "history",
   "conversationId": "conv_xyz789",
+  "status": "open",
   "messages": [
     {
-      "messageId": "msg_001",
-      "role":      "user",
-      "text":      "I would like to request samples of Medication X.",
-      "sentAt":    "2026-04-06T12:05:00Z"
+      "messageId": "msg_041",
+      "role": "user",
+      "text": "Any update on my sample request?",
+      "sentAt": "2026-04-08T09:15:00Z"
     },
     {
-      "messageId": "msg_002",
-      "role":      "agent",
-      "text":      "Thank you! We will process your request shortly.",
-      "sentAt":    "2026-04-06T12:07:00Z"
+      "messageId": "msg_042",
+      "role": "agent",
+      "text": "Your samples have shipped — tracking to follow.",
+      "sentAt": "2026-04-08T09:20:00Z"
+    },
+    {
+      "messageId": "msg_043",
+      "role": "user",
+      "text": "Great, thank you!",
+      "sentAt": "2026-04-08T09:22:00Z"
     }
-  ]
+  ],
+  "meta": {
+    "hasMore": true,
+    "afterCursor": "msg_043",
+    "beforeCursor": "msg_041"
+  },
+  "links": {
+    "prev": "https://api.docupdate.io/concierge/v1/conversations/conv_xyz789/messages?page[before]=msg_041",
+    "next": null
+  }
 }</pre>
       </div>
 
-      <h3>Event: <code style="font-family:'IBM Plex Mono',monospace;font-size:13px">new_message</code></h3>
-      <p>Sent in real time whenever a new message is added to the conversation (from either party).</p>
+      <h4>Send Message</h4>
+      <div class="endpoint"><span class="method post">POST</span>/conversations/{conversationId}/messages</div>
+      <p>Posts a new message from the HCP on the conversation.</p>
+
+      <h3>Request Body</h3>
       <div class="code-block">
         <div class="code-label">JSON</div>
         <pre>{
-  "type":      "new_message",
+  "message": "Any update on my sample request?"
+}</pre>
+      </div>
+
+      <table class="data-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>message</td><td><span class="tag required">required</span> string</td><td>The message text to post on the conversation.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Response — 201 Created</h3>
+      <div class="code-block">
+        <div class="code-label">JSON</div>
+        <pre>{
   "messageId": "msg_003",
-  "role":      "agent",
-  "text":      "Your samples have been shipped.",
-  "sentAt":    "2026-04-06T14:22:00Z"
+  "role": "user",
+  "text": "Any update on my sample request?",
+  "sentAt": "2026-04-06T14:22:00Z"
 }</pre>
       </div>
-
-      <h4>Client → Server Events</h4>
-
-      <h3>Event: <code style="font-family:'IBM Plex Mono',monospace;font-size:13px">send_message</code></h3>
-      <p>Sent by the client to post a new message on the conversation.</p>
-      <div class="code-block">
-        <div class="code-label">JSON</div>
-        <pre>{
-  "type": "send_message",
-  "npi":  "1234567890",
-  "text": "Any update on my sample request?"
-}</pre>
-      </div>
-
-      <p>The server responds with a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">new_message</code> event broadcast to all connected clients (including the sender) to confirm the message was received.</p>
 
       <div class="note"><strong>UI Tip:</strong> Use the <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">role</code> field to position messages in your interface. Messages with <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">role: "user"</code> should appear on the right; <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">role: "agent"</code> on the left.</div>
 
       <div class="flowchart-wrap">
-        <div class="flowchart-title">Messaging WebSocket Flow</div>
+        <div class="flowchart-title">Messaging Flow</div>
         <div class="mermaid">
 flowchart TD
-    A([Open conversation screen]) --> B["Connect\nWSS /conversations/{id}/messages"]
-    B --> C{Connected?}
-    C -- No --> D([Show error — retry])
-    C -- Yes --> E["Receive 'history' event"]
-    E --> F[Render full message history]
-    F --> G{Waiting for events}
-    G -- Agent replies --> H["Receive 'new_message' event"]
-    H --> I[Append message to UI]
-    I --> G
-    G -- User sends message --> J["Send 'send_message' event\ntype · npi · text"]
-    J --> K["Server broadcasts 'new_message'"]
-    K --> I
+    A([Open conversation screen]) --> B["GET /conversations/{id}/messages"]
+    B --> C[Render message history]
+    C --> D{User action}
+    D -- Poll for updates --> E["GET /conversations/{id}/messages"]
+    E --> F[Append new agent replies]
+    F --> D
+    D -- User sends message --> G["POST /conversations/{id}/messages\nmessage"]
+    G --> H[Append sent message to UI]
+    H --> D
         </div>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- 7. REQUEST MANAGEMENT -->
+    <!-- 7. CONVERSATION MANAGEMENT -->
     <div class="section" id="request-mgmt">
       <div class="section-header">
         <span class="section-num">07</span>
-        <h2>Request Management</h2>
+        <h2>Conversation Management</h2>
       </div>
 
-      <p>Use these endpoints to retrieve a user's request history. Each item in the response includes a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">conversationId</code> — this is the same ID used to open the WebSocket messaging connection for that request (see <a href="#messaging" style="color:var(--blue)">Section 06 — Messaging</a>).</p>
+      <p>Use these endpoints to retrieve a user's conversation history. Each item in the response includes a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">conversationId</code> — this is the same ID used to retrieve and send messages for that conversation (see <a href="#messaging" style="color:var(--blue)">Section 06 — Messaging</a>).</p>
 
-      <h4>Get Active Requests</h4>
-      <div class="endpoint"><span class="method get">GET</span>/users/{npi}/requests/active</div>
-      <p>Returns all active requests for the specified HCP. Active requests have a status of <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">new</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">open</code>, or <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">pending</code>.</p>
+      <h4>Get Active Conversations</h4>
+      <div class="endpoint"><span class="method get">GET</span>/users/{npi}/conversations/active</div>
+      <p>Returns active conversations for the specified HCP (paginated). Active conversations have a status of <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">new</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">open</code>, or <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">pending</code>.</p>
+
+      <h3>Query Parameters</h3>
+      <table class="data-table">
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>perPage</td><td><span class="tag optional">optional</span> integer</td><td>Number of conversations per page. Default <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">100</code>, maximum <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">100</code>.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Pagination is offset-based (mirroring the underlying ticketing system). Omit query parameters on the first request to get the first page; then follow the <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pagination.nextPage</code> URL from each response to fetch subsequent pages. When <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">nextPage</code> is <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">null</code>, you have reached the last page. The maximum <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">perPage</code> is <strong>100</strong>; larger values are capped at 100.</div>
 
       <h3>Response — 200 OK</h3>
       <div class="code-block">
         <div class="code-label">JSON</div>
         <pre>{
-  "requests": [
+  "conversations": [
     {
       "conversationId": "conv_xyz789",
-      "requestType":    "Request Free Samples",
-      "status":         "open",
-      "createdAt":      "2026-04-06T12:05:00Z",
-      "updatedAt":      "2026-04-06T14:00:00Z"
+      "requestType": 1,
+      "status": "open",
+      "latestMessage": "Your samples have been shipped.",
+      "hasNewResponse": true,
+      "createdAt": "2026-04-06T12:05:00Z",
+      "updatedAt": "2026-04-06T14:00:00Z"
     }
-  ]
+  ],
+  "pagination": {
+    "perPage": 100,
+    "count": 135,
+    "nextPage": "https://api.docupdate.io/concierge/v1/users/1234567890/conversations/active?perPage=100&page=2",
+    "previousPage": null
+  }
 }</pre>
       </div>
 
-      <h4>Get Archived Requests</h4>
-      <div class="endpoint"><span class="method get">GET</span>/users/{npi}/requests/archived</div>
-      <p>Returns all archived (non-active) requests.</p>
+      <table class="data-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>conversationId</td><td>string</td><td>Unique conversation identifier. Use it to retrieve and send messages (see Section 06).</td></tr>
+          <tr><td>requestType</td><td>integer</td><td>The request category the conversation was created with (see Section 05).</td></tr>
+          <tr><td>status</td><td>string</td><td>Current conversation status (see Status Reference below).</td></tr>
+          <tr><td>latestMessage</td><td>string</td><td>Preview text of the most recent message on the conversation. Use it to render a snippet in the conversation list.</td></tr>
+          <tr><td>hasNewResponse</td><td>boolean</td><td><code style="font-family:'IBM Plex Mono',monospace;font-size:12px">true</code> when there is an unread agent reply. Use it to show an unread badge; it is cleared once the user opens the conversation.</td></tr>
+          <tr><td>createdAt</td><td>string</td><td>ISO 8601 timestamp of when the conversation was created.</td></tr>
+          <tr><td>updatedAt</td><td>string</td><td>ISO 8601 timestamp of the last activity on the conversation.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Get Archived Conversations</h4>
+      <div class="endpoint"><span class="method get">GET</span>/users/{npi}/conversations/archived</div>
+      <p>Returns archived conversations (paginated). Archived conversations have a status of <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">solved</code> or <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">closed</code>. Accepts the same <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">perPage</code> query parameter and returns the same response shape (including the offset-based <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pagination</code> object) as Get Active Conversations above.</p>
 
       <h3>Status Reference</h3>
       <table class="data-table">
         <thead><tr><th>Status</th><th>Category</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>new</td><td><span class="tag active">Active</span></td><td>Request received, awaiting initial response.</td></tr>
-          <tr><td>open</td><td><span class="tag active">Active</span></td><td>Request is being actively worked on.</td></tr>
+          <tr><td>new</td><td><span class="tag active">Active</span></td><td>Conversation received, awaiting initial response.</td></tr>
+          <tr><td>open</td><td><span class="tag active">Active</span></td><td>Conversation is being actively worked on.</td></tr>
           <tr><td>pending</td><td><span class="tag active">Active</span></td><td>Awaiting a response from the HCP.</td></tr>
-          <tr><td>solved</td><td><span class="tag archived">Archived</span></td><td>Request was completed successfully.</td></tr>
-          <tr><td>closed</td><td><span class="tag archived">Archived</span></td><td>Request was resolved and closed.</td></tr>
-          <tr><td>hold</td><td><span class="tag archived">Archived</span></td><td>Request is temporarily on hold.</td></tr>
+          <tr><td>solved</td><td><span class="tag archived">Archived</span></td><td>Conversation was completed successfully.</td></tr>
+          <tr><td>closed</td><td><span class="tag archived">Archived</span></td><td>Conversation was resolved and closed.</td></tr>
         </tbody>
       </table>
 
       <div class="flowchart-wrap">
-        <div class="flowchart-title">Active &amp; Archived Requests Flow</div>
+        <div class="flowchart-title">Active &amp; Archived Conversations Flow</div>
         <div class="mermaid">
 flowchart TD
-    A([Screen opens / resumes]) --> B["GET /users/{npi}/requests/active"]
-    B --> C[Render active request cards]
+    A([Screen opens / resumes]) --> B["GET /users/{npi}/conversations/active"]
+    B --> C[Render active conversation cards]
     C --> D{User action}
-    D -- Tap a request card --> E["Navigate to chat screen\nwith conversationId"]
-    D -- Tap Archived --> F["GET /users/{npi}/requests/archived"]
-    F --> G[Render archived request cards]
+    D -- Tap a conversation card --> E["Navigate to chat screen\nwith conversationId"]
+    D -- Tap Archived --> F["GET /users/{npi}/conversations/archived"]
+    F --> G[Render archived conversation cards]
     G -- Tap a card --> E
-    E --> H["Connect WSS /conversations/{id}/messages"]
+    E --> H["GET /conversations/{id}/messages"]
     H --> I([Messaging flow — see Section 06])
         </div>
       </div>
@@ -1039,78 +1061,10 @@ flowchart TD
 
     <div class="divider"></div>
 
-    <!-- 8. CONTACT PREFERENCES -->
-    <div class="section" id="preferences">
-      <div class="section-header">
-        <span class="section-num">08</span>
-        <h2>Contact Preferences</h2>
-      </div>
-
-      <h4>Get Contact Preferences</h4>
-      <div class="endpoint"><span class="method get">GET</span>/users/{npi}/preferences</div>
-      <p>Returns the HCP's current contact preferences. Use this to pre-populate the preferences form in your application.</p>
-
-      <h3>Response &mdash; 200 OK</h3>
-      <div class="code-block">
-        <div class="code-label">JSON</div>
-        <pre>{
-  "npi": "1234567890",
-  "preferences": {
-    "monday":    "9:00 AM - 5:00 PM",
-    "tuesday":   "No",
-    "wednesday": "10:00 AM - 6:00 PM",
-    "thursday":  "9:00 AM - 5:00 PM",
-    "friday":    "No",
-    "saturday":  "No",
-    "sunday":    "No"
-  },
-  "updatedAt": "2026-04-06T13:00:00Z"
-}</pre>
-      </div>
-
-      <h4>Update Contact Preferences</h4>
-      <div class="endpoint"><span class="method put">PUT</span>/users/{npi}/preferences</div>
-      <p>Sets the HCP's preferred contact hours. Use <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:3px">"No"</code> for any day the user does not wish to be contacted.</p>
-
-      <h3>Request Body</h3>
-      <div class="code-block">
-        <div class="code-label">JSON</div>
-        <pre>{
-  "monday":    "9:00 AM - 5:00 PM",
-  "tuesday":   "No",
-  "wednesday": "10:00 AM - 6:00 PM",
-  "thursday":  "9:00 AM - 5:00 PM",
-  "friday":    "No",
-  "saturday":  "No",
-  "sunday":    "No"
-}</pre>
-      </div>
-
-      <h3>Response — 200 OK</h3>
-      <div class="code-block">
-        <div class="code-label">JSON</div>
-        <pre>{
-  "npi": "1234567890",
-  "preferences": {
-    "monday":    "9:00 AM - 5:00 PM",
-    "tuesday":   "No",
-    "wednesday": "10:00 AM - 6:00 PM",
-    "thursday":  "9:00 AM - 5:00 PM",
-    "friday":    "No",
-    "saturday":  "No",
-    "sunday":    "No"
-  },
-  "updatedAt": "2026-04-06T13:00:00Z"
-}</pre>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- 9. ERROR HANDLING -->
+    <!-- 8. ERROR HANDLING -->
     <div class="section" id="errors">
       <div class="section-header">
-        <span class="section-num">09</span>
+        <span class="section-num">08</span>
         <h2>Error Handling</h2>
       </div>
 
@@ -1123,8 +1077,7 @@ flowchart TD
           <tr><td>400 Bad Request</td><td>Missing or invalid parameters. See error body for details.</td></tr>
           <tr><td>401 Unauthorized</td><td>API key is missing or invalid.</td></tr>
           <tr><td>404 Not Found</td><td>The requested resource does not exist.</td></tr>
-          <tr><td>409 Conflict</td><td>Resource already exists (e.g. duplicate user registration). The existing resource is returned.</td></tr>
-          <tr><td>429 Too Many Requests</td><td>Rate limit exceeded. Retry after the duration in the <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">Retry-After</code> header.</td></tr>
+          <tr><td>409 Conflict</td><td>The request conflicts with the current state of the resource.</td></tr>
           <tr><td>500 Internal Server Error</td><td>Unexpected error on DocUpdate's side. Contact your integration rep if this persists.</td></tr>
         </tbody>
       </table>
@@ -1134,53 +1087,58 @@ flowchart TD
         <div class="code-label">JSON</div>
         <pre>{
   "error": {
-    "code":    "MISSING_FIELD",
+    "code": "MISSING_FIELD",
     "message": "The field 'npi' is required.",
-    "field":   "npi"
+    "field": "npi"
   }
 }</pre>
       </div>
 
-      <h3>Retry Strategy</h3>
-      <p>For transient errors (500, 503, network timeouts), implement exponential backoff:</p>
+      <p>The <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">error.code</code> is a stable, machine-readable string — branch on it in your integration rather than parsing <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">error.message</code>, which is for humans and may change.</p>
+
+      <h3>Error Codes</h3>
       <table class="data-table">
-        <thead><tr><th>Attempt</th><th>Wait Before Retry</th></tr></thead>
+        <thead><tr><th>Code</th><th>HTTP</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>1st retry</td><td>500ms</td></tr>
-          <tr><td>2nd retry</td><td>1,000ms</td></tr>
-          <tr><td>3rd retry</td><td>2,000ms</td></tr>
-          <tr><td>After 3 retries</td><td>Surface error to user</td></tr>
+          <tr><td>MISSING_FIELD</td><td>400</td><td>A required field is absent. <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">error.field</code> names it.</td></tr>
+          <tr><td>INVALID_FIELD</td><td>400</td><td>A field is present but malformed (e.g. NPI not 10 digits). <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">error.field</code> names it.</td></tr>
+          <tr><td>INVALID_REQUEST_TYPE</td><td>400</td><td>The <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">requestType</code> id is not one returned by <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">GET /request-types</code>.</td></tr>
+          <tr><td>UNAUTHORIZED</td><td>401</td><td>The API key is missing or invalid.</td></tr>
+          <tr><td>NOT_FOUND</td><td>404</td><td>The requested user or conversation does not exist.</td></tr>
+          <tr><td>CONFLICT</td><td>409</td><td>The request conflicts with the current state of the resource.</td></tr>
+          <tr><td>INTERNAL_ERROR</td><td>500</td><td>An unexpected error occurred on DocUpdate's side.</td></tr>
         </tbody>
       </table>
-      <div class="note">Do not retry on <strong>400</strong> or <strong>401</strong> errors. These indicate a problem with the request itself that will not resolve on retry.</div>
+
+      <div class="note">New error codes may be introduced over time. Treat any unrecognized <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">error.code</code> as a generic failure for its HTTP status, rather than failing hard.</div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- 10. QUICK REFERENCE -->
+    <!-- 9. QUICK REFERENCE -->
     <div class="section" id="quick-ref">
       <div class="section-header">
-        <span class="section-num">10</span>
+        <span class="section-num">09</span>
         <h2>Quick Reference</h2>
       </div>
 
       <div class="quick-ref">
-        <div class="quick-ref-item"><span class="method post">POST</span><span class="path">/users</span><span class="desc">Register a new HCP user</span></div>
-        <div class="quick-ref-item"><span class="method post">POST</span><span class="path">/conversations</span><span class="desc">Create a new Concierge request</span></div>
-        <div class="quick-ref-item"><span class="method ws">WSS</span><span class="path">/conversations/{id}/messages</span><span class="desc">WebSocket — real-time messaging (history + send)</span></div>
-        <div class="quick-ref-item"><span class="method get">GET</span><span class="path">/users/{npi}/requests/active</span><span class="desc">Get all active requests for a user</span></div>
-        <div class="quick-ref-item"><span class="method get">GET</span><span class="path">/users/{npi}/requests/archived</span><span class="desc">Get all archived requests for a user</span></div>
-        <div class="quick-ref-item"><span class="method get">GET</span><span class="path">/users/{npi}/preferences</span><span class="desc">Get current contact preferences</span></div>
-        <div class="quick-ref-item"><span class="method put">PUT</span><span class="path">/users/{npi}/preferences</span><span class="desc">Update contact preferences</span></div>
+        <div class="quick-ref-item"><span class="method post">POST</span><span class="path">/users</span><span class="desc">Register or update an HCP user (upsert)</span></div>
+        <div class="quick-ref-item"><span class="method get">GET</span><span class="path">/request-types</span><span class="desc">List request types (+ samples for samples request)</span></div>
+        <div class="quick-ref-item"><span class="method post">POST</span><span class="path">/conversations</span><span class="desc">Create a new Concierge conversation</span></div>
+        <div class="quick-ref-item"><span class="method get">GET</span><span class="path">/conversations/{id}/messages</span><span class="desc">Get all messages + status for a conversation</span></div>
+        <div class="quick-ref-item"><span class="method post">POST</span><span class="path">/conversations/{id}/messages</span><span class="desc">Send a new message on a conversation</span></div>
+        <div class="quick-ref-item"><span class="method get">GET</span><span class="path">/users/{npi}/conversations/active</span><span class="desc">Get all active conversations for a user</span></div>
+        <div class="quick-ref-item"><span class="method get">GET</span><span class="path">/users/{npi}/conversations/archived</span><span class="desc">Get all archived conversations for a user</span></div>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- 11. SUPPORT -->
+    <!-- 10. SUPPORT -->
     <div class="section" id="support">
       <div class="section-header">
-        <span class="section-num">11</span>
+        <span class="section-num">10</span>
         <h2>Support</h2>
       </div>
       <p>For questions, issues, or to request sandbox credentials, contact your DocUpdate integration representative.</p>
