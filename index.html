@@ -909,12 +909,12 @@ flowchart TD
       <table class="data-table">
         <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>page[size]</td><td><span class="tag optional">optional</span> integer</td><td>Number of messages per page. Fixed at <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">100</code> for the messages endpoint.</td></tr>
-          <tr><td>page[before]</td><td><span class="tag optional">optional</span> string</td><td>Cursor pointing to a message id. Returns messages <em>older than</em> (preceding) the cursor — used to load earlier history. Prefer following the <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">pagination.prev</code> URL.</td></tr>
-          <tr><td>page[after]</td><td><span class="tag optional">optional</span> string</td><td>Cursor pointing to a message id. Returns messages <em>newer than</em> (following) the cursor. Prefer following the <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">pagination.next</code> URL.</td></tr>
+          <tr><td>pageSize</td><td><span class="tag optional">optional</span> integer</td><td>Number of messages per page. Fixed at <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">100</code> for the messages endpoint.</td></tr>
+          <tr><td>pageBefore</td><td><span class="tag optional">optional</span> string</td><td>Cursor pointing to a message id. Returns messages <em>older than</em> (preceding) the cursor — used to load earlier history. Prefer following the <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">pagination.prev</code> URL.</td></tr>
+          <tr><td>pageAfter</td><td><span class="tag optional">optional</span> string</td><td>Cursor pointing to a message id. Returns messages <em>newer than</em> (following) the cursor. Prefer following the <code style="font-family:'IBM Plex Mono',monospace;font-size:11px">pagination.next</code> URL.</td></tr>
         </tbody>
       </table>
-      <div class="note">Pagination is cursor-based, mirroring Sunshine Conversations. With no cursor, the <strong>most recent</strong> page is returned (newest history first). To load older messages, follow the <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pagination.prev</code> URL (or pass <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">page[before]</code>); to fetch newer messages, follow <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pagination.next</code> (or <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">page[after]</code>). The <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pagination.hasMore</code> flag indicates whether more messages exist in the direction you are paging. Page size is fixed at 100.</div>
+      <div class="note">Pagination is cursor-based, mirroring Sunshine Conversations. With no cursor, the <strong>most recent</strong> page is returned (newest history first). To load older messages, follow the <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pagination.prev</code> URL (or pass <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pageBefore</code>); to fetch newer messages, follow <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pagination.next</code> (or <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pageAfter</code>). The <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">pagination.hasMore</code> flag indicates whether more messages exist in the direction you are paging. Page size is fixed at 100.</div>
 
       <h3>Response — 200 OK</h3>
       <div class="code-block">
@@ -944,7 +944,7 @@ flowchart TD
   ],
   "pagination": {
     "hasMore": true,
-    "prev": "https://api.docupdate.io/concierge/v1/conversations/conv_xyz789/messages?page[before]=msg_041",
+    "prev": "https://api.docupdate.io/concierge/v1/conversations/conv_xyz789/messages?pageBefore=msg_041",
     "next": null
   }
 }</pre>
